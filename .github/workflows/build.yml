@@ -60,25 +60,15 @@ jobs:
         echo "FILENAME=armips_${GITHUB_REF_NAME}_${PLATFORM}" >> $GITHUB_ENV
         echo "RELEASENAME=armips_${GITHUB_REF_NAME}" >> $GITHUB_ENV
 
-    - name: Upload
-      uses: actions/upload-artifact@v4
-      with:
-        name: ${{env.FILENAME}}
-        path: ${{github.workspace}}/install
-
     - name: Archive Release
       uses: thedoctor0/zip-release@0.7.6
-      if: startsWith(github.ref, 'refs/tags/')
       with:
         type: 'zip'
         filename: ${{env.FILENAME}}.zip
         directory: '${{github.workspace}}/install'
 
-    - name: Release
-      uses: softprops/action-gh-release@v2
-      if: startsWith(github.ref, 'refs/tags/')
+    - name: Upload
+      uses: actions/upload-artifact@v4
       with:
-        name: ${{env.RELEASENAME}}
-        prerelease: true
-        files: ${{github.workspace}}/install/${{env.FILENAME}}.zip
-    
+        name: ${{env.FILENAME}}
+        path: ${{github.workspace}}/install
